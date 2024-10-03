@@ -1,4 +1,4 @@
-package edu.trincoll.koans
+package edu.trincoll.koans.solutions
 
 import kotlin.random.Random as KRandom
 import java.util.Random as JRandom
