@@ -17,11 +17,17 @@ abstract class Employee(open val name : String, open val id : Int) : Comparable<
         return "Employee(name=$name, id=$id)"
     }
     override fun compareTo(other: Employee): Int {
-        val nameComparison = this.name.compareTo(other.name)
-        return if (nameComparison == 0) {
-            this.id.compareTo(other.id)  // Compare by id if names are equal
-        } else {
-            nameComparison  // Return name comparison result
+        val payComparison = this.pay().compareTo(other.pay())
+        if (payComparison != 0) {
+            return payComparison
+        }
+        else {
+            val nameComparison = this.name.compareTo(other.name)
+            return if (nameComparison == 0) {
+                this.id.compareTo(other.id)  // Compare by id if names are equal
+            } else {
+                nameComparison  // Return name comparison result
+            }
         }
     }
 }
