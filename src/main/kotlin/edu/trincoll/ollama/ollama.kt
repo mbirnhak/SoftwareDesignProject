@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 data class OllamaRequest(
@@ -26,7 +27,7 @@ data class OllamaResponse(
 suspend fun main() {
     val client = HttpClient(CIO) {
         install(ContentNegotiation) {
-            json()
+            json( Json { ignoreUnknownKeys = true  } )
         }
         engine {
             requestTimeout = 60_000 // Was giving a timeout error without this
@@ -39,8 +40,7 @@ suspend fun main() {
         setBody(OllamaRequest("llama3.2", "Explain networking protocols to me", false))
     }
 
-    val jsonParser = Json{ ignoreUnknownKeys = true } //ignore Json keys that are not response or model
-    val ollamaResponse = jsonParser.decodeFromString<OllamaResponse>(response.body<String>())
+    val ollamaResponse = response.body<OllamaResponse>()
 
     println(response.status.value)
     println(ollamaResponse.response)
